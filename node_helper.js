@@ -100,7 +100,11 @@ module.exports = NodeHelper.create({
 					} catch (icmpError) {
 						// Fallback to TCP on port 80 if ICMP binary is missing
 						if (icmpError.message.includes("error while executing the ping program")) {
-							console.log(`MMM-ServerStatus: ICMP ping failed (binary missing) for ${host.ip}. Falling back to TCP port 80 check.`);
+							if (!this.silencedHosts) this.silencedHosts = new Set();
+							if (!this.silencedHosts.has(host.ip)) {
+								console.log(`MMM-ServerStatus: ICMP ping binary missing. Falling back to TCP port 80 for ${host.ip} (will silence future logs for this host).`);
+								this.silencedHosts.add(host.ip);
+							}
 							const result = await this.tcpPing(host.ip, 80, timeout);
 							return {
 								...host,
