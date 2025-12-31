@@ -34,12 +34,11 @@ Module.register("MMM-ServerStatus", {
 	},
 
 	getPings() {
-		this.sendSocket
 		// Send notification and config to request pings from node helper
 		this.sendSocketNotification("MMM-SERVERSTATUS_GET_PINGS", {
 			group: this.config.group,
-			hosts: this.config.hosts,
-		})
+			hosts: this.config.hosts
+		});
 
 		// Schedule next update
 		setTimeout(() => {
